@@ -11,3 +11,9 @@ services:
          class: Twig_Extensions_Extension_Text
          tags:
              - { name: twig.extension }
+             
+    basket:
+      class: AppBundle\Service\Basket
+      arguments: 
+        session: "@session"
+      

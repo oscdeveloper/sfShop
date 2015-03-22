@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Product;
 
 class BasketController extends Controller
 {
@@ -15,34 +16,20 @@ class BasketController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $session = $request->getSession();
-        
-        $basket = $session->get('basket', array());
-        $products = $this->getProducts();
-
-        $productsInBasket = array();
-        foreach ($basket as $id => $b) {
-            $productsInBasket[] = $products[$id];
-        }
-
         return array(
-            'products_in_basket' => $productsInBasket,
+            'basket' => $this->get('basket'),
         );
     }
 
     /**
      * @Route("/koszyk/{id}/dodaj", name="basket_add")
      */
-    public function addAction($id, Request $request)
+    public function addAction(Product $product)
     {
-        $session = $request->getSession();
-
-        $basket = $session->get('basket', array());
-
-        $basket[$id] = 1;
-
-        $session->set('basket', $basket);
-        $this->addFlash('notice', 'Produkt został dodany do koszyka');
+    	$basket = $this->get('basket');
+    	$basket->add($product);
+    	
+        $this->addFlash('notice', sprintf('Produkt "%s" został dodany do koszyka', $product->getName()));
 
         return $this->redirectToRoute('basket');
     }
