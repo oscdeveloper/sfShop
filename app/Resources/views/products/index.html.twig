@@ -5,6 +5,8 @@
 {% block body %}
     
     <h1>Lista produktów</h1>
+    
+    <a href="{{ path('products_add') }}" class="btn btn-primary">Dodaj nowy produkt</a>
         
     {% for product in products %}
 
