@@ -5,6 +5,12 @@
 {% block body %}
     <h1>Koszyk</h1>
 
+    {% if basket.products|length > 0 %}
+    	<a href="{{ path('basket_clear') }}" class="btn btn-warning">
+    		Wyczyść koszyk
+    	</a>
+    {% endif %}
+    
     <table class="table table-striped">
         <thead>
             <tr>

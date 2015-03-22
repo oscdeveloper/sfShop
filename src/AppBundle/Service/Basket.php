@@ -23,7 +23,7 @@ class Basket
 	{
 		$products = $this->getProducts();
 		
-		if (!array_key_exists($product->getId(), $product)) {
+		if (!array_key_exists($product->getId(), $products)) {
 
 			$products[$product->getId()] = array(
 				'id' 		=> $product->getId(),
@@ -42,14 +42,31 @@ class Basket
 		
 	}
 	
+	public function remove(Product $product)
+	{
+		$products = $this->getProducts();
+		
+		if (!array_key_exists($product->getId(), $products)) {
+			
+			throw new \Exception(sprintf('Produktu %s nie ma w koszyku.', $product->getName()));
+			
+		}
+		
+		unset($products[$product->getId()]);
+	
+		$this->session->set('basket', $products);
+	
+		return $this;
+	
+	}
+
+	public function clear()
+	{
+	
+		$this->session->remove('basket');
+	
+		return $this;
+	
+	}	
+	
 }
-
-/* $session = $request->getSession();
-
-$basket = $session->get('basket', array());
-$products = $this->getProducts();
-
-$productsInBasket = array();
-foreach ($basket as $id => $b) {
-	$productsInBasket[] = $products[$id];
-} */

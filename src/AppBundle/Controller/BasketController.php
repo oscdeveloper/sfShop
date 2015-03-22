@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Product;
+use Assetic\Exception\Exception;
 
 class BasketController extends Controller
 {
@@ -37,28 +38,24 @@ class BasketController extends Controller
     /**
      * @Route("/koszyk/{id}/usun", name="basket_remove")
      */
-    public function removeAction($id)
+    public function removeAction(Product $product)
     {
-        $session = $this->get('session');
-        
-        $basket = $session->get('basket', array());
-        
-        if (!array_key_exists($id, $basket)) {
-            $this->addFlash('notice', 'Produkt nie istnieje');
-            
-            return $this->redirectToRoute('basket');
-        }
-        
-        unset($basket[$id]);
 
-        $session->set('basket', $basket);
-        $product = $this->getProduct($id);
-
-        //$this->addFlash('notice', 'Produkt ' . $product['name'] . ' został usunięty z koszyka');
-
-        $this->addFlash('notice', sprintf('Product %s został usunięty z koszyka', $product['name']));
+    	$basket = $this->get('basket');
+    	
+    	try {
+    		$basket->remove($product);
+    	
+        	$this->addFlash('notice', sprintf('Produkt "%s" został usunięty z koszyka', $product->getName()));
         
+    	} catch (\Exception $e) {
+    		
+    		$this->addFlash('notice', $e->getMessage());
+    	
+    	}	
+    	
         return $this->redirectToRoute('basket');
+    
     }
 
     /**
@@ -73,14 +70,20 @@ class BasketController extends Controller
     }
 
     /**
-     * @Route("/koszyk/wyczysc")
+     * @Route("/koszyk/wyczysc", name="basket_clear")
      * @Template()
      */
     public function clearAction()
     {
-        return array(
-                // ...
-            );
+    	
+    	$this
+    	->get('basket')
+    	->clear();
+    	
+    	$this->addFlash('notice', 'Koszyk został pomyślnie wyczyszczony.');
+    	
+    	return $this->redirectToRoute('basket');
+
     }
 
     /**
