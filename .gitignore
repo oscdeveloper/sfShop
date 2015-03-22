@@ -11,3 +11,6 @@
 /bin/
 /composer.phar
 /nbproject/*
+/.settings/
+/.project
+/.buildpath
