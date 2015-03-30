@@ -37,7 +37,25 @@
                     <td colspan="5">Koszyk jest pusty</td>
                 </tr>
             {% endfor %}
+            
         </tbody>
     </table>
+    
+            
+	{% if countProducts > 0 %}
+		<h2>Podsumowanie</h2>
+	    <table class="table">
+	    	<tr>
+	    		<td>
+	    			<strong>Łączna liczba sztuk:</strong> {{ countProducts }}
+	    		</td>
+	    	</tr>
+	    	<tr>
+	    		<td>
+	    			<strong>Łączna wartość koszyka:</strong> {{ totalValue }}
+	    		</td>
+	    	</tr>
+	    </table>  
+    {% endif %}    
 
 {% endblock %}

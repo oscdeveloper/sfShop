@@ -67,6 +67,40 @@ class Basket
 	
 		return $this;
 	
+	}
+	
+	public function countProducts() {
+		
+		$products = $this->getProducts();
+		
+		$count = 0;
+		
+		foreach ($products as $product) {
+		
+			$count += $product['quantity'];
+			
+		}
+		
+		return $count;
+		
+	}
+	
+	public function totalValue() {
+	
+		$products = $this->getProducts();
+	
+		$totalValue = 0;
+	
+		foreach ($products as $product) {
+	
+			$totalValue += $product['quantity'] * $product['price'];
+				
+		}
+		
+		$totalValue = number_format($totalValue, 2, ',', '') . ' zł';
+		
+		return $totalValue;
+	
 	}	
 	
 }

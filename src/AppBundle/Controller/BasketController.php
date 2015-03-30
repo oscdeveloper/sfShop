@@ -19,6 +19,8 @@ class BasketController extends Controller
     {
         return array(
             'basket' => $this->get('basket'),
+        	'countProducts' => $this->countProducts(),
+        	'totalValue' => $this->totalValue()
         );
     }
 
@@ -120,5 +122,21 @@ class BasketController extends Controller
 
         return $products[$id];
     }
+    
+    public function countProducts() {
+    	
+    	$basket = $this->get('basket');
+    	
+    	return $basket->countProducts();    	
+    	
+    }
+    
+    public function totalValue() {
+    	 
+    	$basket = $this->get('basket');
+    	 
+    	return $basket->totalValue();
+    	 
+    }    
 
 }
