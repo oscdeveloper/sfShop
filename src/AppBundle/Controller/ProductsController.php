@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use AppBundle\Entity\Category;
 use AppBundle\Form\ProductType;
+use AppBundle\Entity\ProductOrder;
 
 class ProductsController extends Controller
 {
@@ -45,5 +46,33 @@ class ProductsController extends Controller
     	));
     }    
     
+    public function orderAction()
+    {
+    	// pobranie usługi ksozyka
+    	$basket = $this->get('basket');
+    	$products = $basket->getProducts();
+    	
+    	// bierzemy identyfikatory z sesji dla bazy danych
+    	$product_ids = array_keys($products);
+    	
+    	// wybieramy produkty z bazy danych na podstawie id
+    	$products = $this->getDoctrine()->getRepository('AppBundle:Product')
+    		->find($product_ids);
+    	
+    	// tworzymy nowy obiekt zamówienia
+    	$order = new ProductOrder();
+    	// przypisujemy poszczególne produkty do zamówienia na poziomie encji
+    	foreach($products as $product) {
+    		$order->addProduct($product);
+    	}
+    	
+    	// pobieramy Entity manager by móc zapisać encje w bazie
+    	$em = $this->getDoctrine()->getManager();
+    	// dodajemy encje zamówienia do rejestru Doctrine
+    	$em->persist($order);
+    	// wysłanie zmian do bazy danych w tym nowo-utowrzonego produktu
+    	$em->flush();
+    	
+    }
 
 }

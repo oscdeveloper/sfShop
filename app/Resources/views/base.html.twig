@@ -56,7 +56,9 @@
             
             <div class="row">
                 <div class="col-md-12">
-                    ShopApp
+					{% block basketBox %}
+                    	{{ render(controller('AppBundle:Basket:box')) }}
+                    {% endblock %}
                 </div>
             </div>
             

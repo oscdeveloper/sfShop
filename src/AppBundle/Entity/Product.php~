@@ -61,14 +61,6 @@ class Product
     private $orders;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    	$this->orders = new \Doctrine\Common\Collections\ArrayCollection();
-    }    
-    
-    /**
      * Get id
      *
      * @return integer 
@@ -191,39 +183,5 @@ class Product
     public function getCategory()
     {
         return $this->category;
-    }
-
-
-    /**
-     * Add orders
-     *
-     * @param \AppBundle\Entity\ProductOrder $orders
-     * @return Product
-     */
-    public function addOrder(\AppBundle\Entity\ProductOrder $orders)
-    {
-        $this->orders[] = $orders;
-
-        return $this;
-    }
-
-    /**
-     * Remove orders
-     *
-     * @param \AppBundle\Entity\ProductOrder $orders
-     */
-    public function removeOrder(\AppBundle\Entity\ProductOrder $orders)
-    {
-        $this->orders->removeElement($orders);
-    }
-
-    /**
-     * Get orders
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOrders()
-    {
-        return $this->orders;
     }
 }

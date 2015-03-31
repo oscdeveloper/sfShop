@@ -85,7 +85,7 @@ class Basket
 		
 	}
 	
-	public function totalValue() {
+	public function getTotalValue() {
 	
 		$products = $this->getProducts();
 	

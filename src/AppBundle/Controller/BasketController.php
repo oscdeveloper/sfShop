@@ -20,7 +20,7 @@ class BasketController extends Controller
         return array(
             'basket' => $this->get('basket'),
         	'countProducts' => $this->countProducts(),
-        	'totalValue' => $this->totalValue()
+        	'getTotalValue' => $this->getTotalValue()
         );
     }
 
@@ -131,12 +131,20 @@ class BasketController extends Controller
     	
     }
     
-    public function totalValue() {
+    public function getTotalValue() {
     	 
     	$basket = $this->get('basket');
     	 
-    	return $basket->totalValue();
+    	return $basket->getTotalValue();
     	 
-    }    
+    } 
+
+    public function boxAction () {
+    	
+    	return $this->render('AppBundle:Basket:box.html.twig', array(
+    			'basket' => $this->get('basket'),
+    	));   	
+    	
+    }
 
 }
