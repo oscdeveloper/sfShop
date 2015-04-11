@@ -21,6 +21,13 @@ class Basket
 	
 	public function add(Product $product, $quantity = 1)
 	{
+		
+		if ($product->getAmount() <= 0 ) {
+			//$this->addFlash('notice', 'Nie ma wystarczającej ilości.');
+			//return $this->redirectToRoute('products_list');
+			throw new \Exception('Produkt jest niedostępny.');
+		}		
+		
 		$products = $this->getProducts();
 		
 		if (!array_key_exists($product->getId(), $products)) {

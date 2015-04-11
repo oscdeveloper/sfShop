@@ -1,18 +1,21 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}Produkty{% endblock %}
+{% block title %}Wyniki wyszukiwania dla <strong>{{ query }}</strong>{% endblock %}
 
 {% block body %}
     
-    <h1>Lista produktów</h1>
+    <h1>{{ block('title') }}</h1>
     
-    <form action="{{ path('product_search') }}" class="navbar-form" role="search">
-        <div class="form-group">
-            <input type="text" name="query" class="form-control" placeholder="Szukaj" value="{{ query }}">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-        
+    {% if products|length > 0 %}
+    
+    	<p>Znaleziono {{ products|length }} produktów.</p>
+    
+    {% else %}
+    
+    	<p>Nic nie znaleziono.</p>
+    
+    {% endif %}
+    
     {% for product in products %}
 
         {% if loop.first or (loop.index % 4) == 0  %}
@@ -44,10 +47,6 @@
             </div>
         {% endif %}
 
-    {% endfor %}
-    
-    <div class="row">
-        {{ knp_pagination_render(products) }}
-    </div>
+    {% endfor %}    
     
 {% endblock %}

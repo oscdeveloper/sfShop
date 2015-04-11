@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Product;
-use Assetic\Exception\Exception;
 
 class BasketController extends Controller
 {
@@ -27,10 +26,26 @@ class BasketController extends Controller
     /**
      * @Route("/koszyk/{id}/dodaj", name="basket_add")
      */
-    public function addAction(Product $product)
+    public function addAction(Request $request, Product $product = null)
     {
-    	$basket = $this->get('basket');
-    	$basket->add($product);
+    	
+    	if ( is_null($product) ) {
+    		$this->addFlash('notice', 'Nie ma w bazie produktu.');
+    		return $this->redirectToRoute('products_list');
+    	}
+    	
+    	try {
+    		$basket = $this->get('basket');
+    		$basket->add($product);    		
+    	} catch (\Exception $e) {
+    		
+    		$this->addFlash('error', $e->getMessage());
+    		return $this->redirect($request->headers->get('referer'));
+    		
+    	}
+    	
+    	
+
     	
         $this->addFlash('notice', sprintf('Produkt "%s" został dodany do koszyka', $product->getName()));
 

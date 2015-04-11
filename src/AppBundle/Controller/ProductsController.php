@@ -2,13 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
-
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Product;
 use AppBundle\Form\ProductType;
-use AppBundle\Entity\ProductOrder;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductsController extends Controller
 {
@@ -34,17 +33,42 @@ class ProductsController extends Controller
     }
     
     /**
-     * @Route("/produkty/dodaj", name="products_add")
+     * @Route("/product/{id}", name="product_show")
      */
-    public function addAction(Request $request)
+    public function showAction(Product $product)
     {
-    	$form = $this->createForm(new ProductType());
-    	$form->handleRequest($request);
+    	return $this->render('products/show.html.twig', [
+    			'product'   => $product
+    	]);
+    }   
+     
+    /**
+     * @Route("/szukaj", name="product_search")
+     */    
+    public function searchAction(Request $request)
+    {
+    	$query = $request->query->get('query');
+
+    	$constraint = new \Symfony\Component\Validator\Constraints\NotBlank();
     	
-    	return $this->render('products/add.html.twig', array(
-    			'form' => $form->createView(),
+    	$errors = $this->get('validator')->validate($query, $constraint);
+    	    	
+    	$products = $this->getDoctrine()
+    	->getRepository('AppBundle:Product')
+    	->createQueryBuilder('p')
+    	->select('p')
+    	->where('p.name LIKE :query')
+    	->orWhere('p.description LIKE :query')
+    	->setParameter('query', '%' . $query . '%')
+    	->getQuery()
+    	->getResult();
+    	
+    	return $this->render('products/search.html.twig', array(
+    			'query' => $query,
+    			'products' => $products
     	));
-    }    
+    	
+    }
     
     public function orderAction()
     {
