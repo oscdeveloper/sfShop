@@ -23,4 +23,53 @@
         </div>
     </div>
     
+
+
+<h2>Komentarze</h2>
+
+<form method="post" action="#" novalidate="novalidate">
+
+	{{ form_widget(form) }}
+	
+	<div class="form-group">
+	
+	{{ form_row(form.content) }}
+	
+	{#{{ form_label(form.content) }}
+		{{ form_errors(form.content) }}
+		{{ form_widget(form.content, {'attr':{'class':'form-control'}})) }}#}
+		
+		
+		
+	</div>
+	
+	{{ form_rest(form) }}
+	
+	<input class="btn btn-success" type="submit" value="Dodaj komentarz" />
+
+</form>
+
+{% for comment in product.comments if comment.verified %}
+
+	<div class="row">
+	
+		<div class="panel panel-default">
+		
+			<div class="panel-body">
+			
+				<p>{{ comment.content }}</p>
+				<small>Dodany {{ comment.createdAt|date('d-m-Y') }}</small>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+	{% else %}
+	
+	Brak komentarzy.
+
+{% endfor %}
+
 {% endblock %}

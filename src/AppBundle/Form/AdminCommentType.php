@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CommentType extends AbstractType
+class AdminCommentType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,18 +15,17 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+        ->add('product')
             ->add('content', 'textarea', array(
             		'label' => 'Treść komentarza',
-            		'attr' =>array(
-            				'class' => 'form-control',
-            				'placeholder' => 'Wprowadź treść komentarza'
             		)
-            ))
+            )
+            ->add('verified');
             /*->add('createdAt')
             ->add('nbVoteUp')
             ->add('nbVoteDown')
             ->add('verified')*/
-        ;
+        
     }
     
     /**
