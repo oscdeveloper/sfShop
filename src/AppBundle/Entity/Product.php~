@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Product
@@ -25,6 +27,8 @@ class Product
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * 
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -39,18 +43,23 @@ class Product
      * @var string
      *
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2)
+     * 
+     * @Assert\NotNull()
+     * @Assert\Range(min=0.01,minMessage="Cena musi być większa lub równa {{ limit }}")
      */
-    private $price;
+    private $price = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="amount", type="integer")
      */
-    private $amount;
+    private $amount = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
+     * 
+     * @Assert\NotNull(message="Proszę wybrać odpowiednią kategorię")
      */
     private $category;
 	
@@ -59,7 +68,24 @@ class Product
      * @ORM\ManyToMany(targetEntity="ProductOrder", mappedBy="products")
      */
     private $orders;
+    
+    
+   /**
+    * 
+    * @var ArrayCollection
+    * 
+    * @ORM\OneToMany(targetEntity="Comment", mappedBy="product")
+    */
+    private $comments;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    	$this->orders = new \Doctrine\Common\Collections\ArrayCollection();
+    }    
+    
     /**
      * Get id
      *
@@ -183,5 +209,39 @@ class Product
     public function getCategory()
     {
         return $this->category;
+    }
+
+
+    /**
+     * Add orders
+     *
+     * @param \AppBundle\Entity\ProductOrder $orders
+     * @return Product
+     */
+    public function addOrder(\AppBundle\Entity\ProductOrder $orders)
+    {
+        $this->orders[] = $orders;
+
+        return $this;
+    }
+
+    /**
+     * Remove orders
+     *
+     * @param \AppBundle\Entity\ProductOrder $orders
+     */
+    public function removeOrder(\AppBundle\Entity\ProductOrder $orders)
+    {
+        $this->orders->removeElement($orders);
+    }
+
+    /**
+     * Get orders
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 }

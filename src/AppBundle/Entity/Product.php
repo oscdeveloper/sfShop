@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Product
@@ -67,6 +68,15 @@ class Product
      * @ORM\ManyToMany(targetEntity="ProductOrder", mappedBy="products")
      */
     private $orders;
+    
+    
+   /**
+    * 
+    * @var ArrayCollection
+    * 
+    * @ORM\OneToMany(targetEntity="Comment", mappedBy="product")
+    */
+    private $comments;
 
     /**
      * Constructor
@@ -233,5 +243,38 @@ class Product
     public function getOrders()
     {
         return $this->orders;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param \AppBundle\Entity\Comment $comments
+     * @return Product
+     */
+    public function addComment(\AppBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \AppBundle\Entity\Comment $comments
+     */
+    public function removeComment(\AppBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }
