@@ -78,3 +78,11 @@ swiftmailer:
 knp_paginator:
     template:
         pagination: paginator.html.twig
+        
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: AppBundle\Entity\User # to trzeba definiować
+    registration: 
+      confirmation:
+        enabled: false # potwierdzanie mailem nie działa przy false
