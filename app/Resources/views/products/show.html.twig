@@ -27,6 +27,12 @@
 
 <h2>Komentarze</h2>
 
+{% if not app.user %}
+
+	<p><a href="{{ path('fos_user_security_login') }}">Zaloguj się</a>, aby dodać komentarz</p>
+
+{% else %}
+
 <form method="post" action="#" novalidate="novalidate">
 
 	{{ form_widget(form) }}
@@ -49,6 +55,8 @@
 
 </form>
 
+{% endif %}
+
 {% for comment in product.comments if comment.verified %}
 
 	<div class="row">
@@ -58,7 +66,7 @@
 			<div class="panel-body">
 			
 				<p>{{ comment.content }}</p>
-				<small>Dodany {{ comment.createdAt|date('d-m-Y') }}</small>
+				<small>Dodany {{ comment.createdAt|date('d-m-Y') }} przez {{ comment.user }}</small>
 			
 			</div>
 		

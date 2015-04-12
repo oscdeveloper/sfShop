@@ -21,6 +21,12 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="user")
+     */
+    protected $comments;
 
 
     /**
